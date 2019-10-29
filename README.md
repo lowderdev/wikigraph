@@ -1,21 +1,33 @@
 # Wikigraph
 
-**TODO: Add description**
+TODO:
 
-## Installation
+* Create `filterer`
+  * checks datastore (redis?) to determine if uri has been scraped
+  * publishes non-scraped uris to
+* Create `persister` that writes to neo4j
+  * Merge (parent)-[:links_to]->(children) subgraphs to neo4j
+* Upon app start spawn supervision tree with `filterer`, `persister`, and `N` number of `scraper` processes
+  * `N` not to exceed Wikipedia API rate limit
+* Create CLI command to start scraping at specific article
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `wikigraph` to your list of dependencies in `mix.exs`:
+Topic - process diagram
 
-```elixir
-def deps do
-  [
-    {:wikigraph, "~> 0.1.0"}
-  ]
-end
+```text
++------------------+
+|                  |
+|                  v
+|        (article-uris-gathered)
+|          |                 |
+|          v                 v
+|      [filterer]       [persister]
+|          |                 |
+|          v                 v
+|  (new-uris-determined)  (neo4j)
+|          |
+|          v
+|      [scraper] x N
+|          |
+|          |
++----------+
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/wikigraph](https://hexdocs.pm/wikigraph).
-
