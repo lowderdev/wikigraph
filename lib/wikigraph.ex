@@ -1,7 +1,8 @@
 defmodule Wikigraph do
-  def start do
-    HTTPoison.start()
-    response = HTTPoison.get!( "https://en.wikipedia.org/wiki/Elixir_(programming_language)")
+
+  # Wikigraph.start("Elixir_(programming_language)")
+  def start(uri) do
+    response = HTTPoison.get!("https://en.wikipedia.org/wiki/#{uri}")
 
     # list = """
     #   "<a href=\"/wiki/Metaprogramming\" title=\"Metaprogramming\">metaprogramming</a>",
@@ -16,7 +17,8 @@ defmodule Wikigraph do
     #   "<a href=\"#cite_note-7\">&#91;7&#93;</a>"
     # """
 
-    get_valid_uris(response.body)
+    uris = get_valid_uris(response.body)
+    %{ parent: uri, children: uris }
   end
 
   def get_valid_uris(html) do
