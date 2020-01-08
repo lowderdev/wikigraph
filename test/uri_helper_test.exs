@@ -1,6 +1,6 @@
-defmodule WikigraphTest do
+defmodule UriHelperTest do
   use ExUnit.Case
-  doctest Wikigraph
+  doctest UriHelper
 
   setup_all do
     list = """
@@ -20,8 +20,8 @@ defmodule WikigraphTest do
   end
 
 
-  test "scrape", state do
-    IO.inspect(state)
-    assert Wikigraph.scrape(state.list) == :world
+  test "get_valid_uris", state do
+    expected_uris = ["Metaprogramming", "Macro_(computer_science)", "Polymorphism_(computer_science)", "PagerDuty", "Discord_(software)"]
+    assert UriHelper.get_valid_uris(state.list) == expected_uris
   end
 end
